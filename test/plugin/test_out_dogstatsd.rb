@@ -27,7 +27,7 @@ class DogstatsdOutputTest < Test::Unit::TestCase
   def teardown
   end
 
-  def test_configure
+  def test_configure_host_port
     d = create_driver(<<-EOC)
       type dogstatsd
       host HOST
@@ -36,6 +36,15 @@ class DogstatsdOutputTest < Test::Unit::TestCase
 
     assert_equal('HOST', d.instance.host)
     assert_equal(12345, d.instance.port)
+  end
+
+  def test_configure_unix_domain_socket
+    d = create_driver(<<-EOC)
+      type dogstatsd
+      socket_path /var/run/datadog/apm.socket
+    EOC
+
+    assert_equal('/var/run/datadog/apm.socket', d.instance.socket_path)
   end
 
   def test_write

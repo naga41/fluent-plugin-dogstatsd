@@ -4,6 +4,7 @@ module Fluent
 
     config_param :host, :string, :default => nil
     config_param :port, :integer, :default => nil
+    config_param :socket_path, :string, :default => nil
     config_param :use_tag_as_key, :bool, :default => false
     config_param :use_tag_as_key_if_missing, :bool, :default => false
     config_param :flat_tags, :bool, :default => false
@@ -27,10 +28,14 @@ module Fluent
     def start
       super
 
-      host = @host || Statsd::DEFAULT_HOST
-      port = @port || Statsd::DEFAULT_PORT
-
-      @statsd ||= Statsd.new(host, port)
+      if @socket_path
+        socket_path = @socket_path
+        @statsd ||= Statsd.new(socket_path: socket_path)
+      else
+        host = @host || Statsd::DEFAULT_HOST
+        port = @port || Statsd::DEFAULT_PORT
+        @statsd ||= Statsd.new(host, port)
+      end
     end
 
     def format(tag, time, record)

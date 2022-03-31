@@ -28,6 +28,9 @@ Supported types are `increment`, `decrement`, `count`, `gauge`, `histogram`, `ti
   # Dogstatsd port
   port 8125
 
+  # If you want to connect over Unix Domain Socket
+  # socket_path /path/to/socket/file
+
   # Use tag of fluentd record as key sent to Dogstatsd
   use_tag_as_key false
 
